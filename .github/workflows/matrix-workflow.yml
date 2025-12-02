@@ -1,0 +1,25 @@
+name: matrix-workflow.yml
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-matrix:
+    strategy:
+      matrix:
+        java-version: ['17', '11']
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v4
+
+      - name: config jdk
+        uses: actions/setup-java@v4
+        with:
+            java-version: ${{ matrix.java_version }}
+            distribution: 'corretto'
+
+      - name: exibir versão java no log
+        run: echo "Versão em uso - ${{matrix.java-version}} "
