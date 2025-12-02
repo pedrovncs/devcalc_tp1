@@ -1,0 +1,16 @@
+name: tests.yml
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  testes:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout repo
+        uses: actions/checkout@v4
+
+      - name: print mensagem no log
+        run: echo "Rodando testes"

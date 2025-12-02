@@ -1,0 +1,11 @@
+name: hello.yml
+
+on:
+  push:
+
+jobs:
+  hello-ci-cd:
+    runs-on: ubuntu-latest
+    steps:
+      - name: print mensagem no log
+        run: echo "Hello CI/CD"
