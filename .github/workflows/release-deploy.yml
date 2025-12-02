@@ -1,0 +1,12 @@
+name: release-deploy.yml
+
+on:
+  release:
+
+jobs:
+  release-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: print do deploy no log
+        run: echo "Deploy realizado com sucesso"
