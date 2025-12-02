@@ -1,3 +1,5 @@
+[![maven-ci.yml](https://github.com/pedrovncs/devcalc_tp1/actions/workflows/maven-ci.yml/badge.svg)](https://github.com/pedrovncs/devcalc_tp1/actions/workflows/maven-ci.yml)
+
 
 # devcalc tp1
 
