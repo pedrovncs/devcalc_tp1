@@ -18,7 +18,7 @@ jobs:
       - name: config jdk
         uses: actions/setup-java@v4
         with:
-            java-version: ${{ matrix.java_version }}
+            java-version: ${{ matrix.java-version }}
             distribution: 'corretto'
 
       - name: exibir versão java no log
