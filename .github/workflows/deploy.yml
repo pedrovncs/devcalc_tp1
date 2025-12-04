@@ -1,4 +1,4 @@
-name: deploy.yml
+name: Build Once Deploy Many
 
 on:
   push:
@@ -6,14 +6,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  multi-deploy:
+  build:
+    name: build
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        stage: [dev, staging, production]
-      max-parallel: 1
-    environment: ${{ matrix.stage }}
-
     steps:
       - name: checkout repo
         uses: actions/checkout@v4
@@ -24,22 +19,37 @@ jobs:
           distribution: 'corretto'
           java-version: '17'
 
-      - name: build
+      - name: Compilar (Maven)
+        run: mvn clean package
+
+      - name: upload jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-build-final
+          path: target/*.jar
+
+  multi-deploy:
+    name: deploy em ambientes
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        stage: [dev, staging, production]
+      max-parallel: 1
+    environment: ${{ matrix.stage }}
+
+    steps:
+      - name: download jar
+        uses: actions/download-artifact@v4
+        with:
+          name: app-build
+
+      - name: Simular Deploy
         env:
           AMBIENTE_ATUAL: ${{ matrix.stage }}
           MINHA_SENHA: ${{ secrets.DB_PASSWORD }}
           MEU_USUARIO: ${{ secrets.DB_USER }}
-        run: |
-          mvn clean package
-          
-          echo "usando credencial secret do ambiente $AMBIENTE_ATUAL. SENHA: $MINHA_SENHA"
-          echo "usando credencial secret do ambiente $AMBIENTE_ATUAL. USUARIO $MEU_USER"
-
-      - name: upload arquivo .jar
-        uses: actions/upload-artifact@v4
-        with:
-          name: app.jar
-          path: target/*.jar
-
-      - name: log ambiente atual
-        run: echo "Deploy simulado em ambiente $AMBIENTE_ATUAL finalizado."
+        run: |          
+          echo "simulando deploy no ambiente: $AMBIENTE_ATUAL"
+          echo "usando secret DB_USER: $MEU_USUARIO"
+          echo "usando secret DB_PASSWORD: $MINHA_SENHA"
