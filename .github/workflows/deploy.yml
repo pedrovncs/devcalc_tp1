@@ -1,4 +1,4 @@
-name: Build Once Deploy Many
+name: deploy.yml
 
 on:
   push:
